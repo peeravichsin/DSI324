@@ -1,0 +1,56 @@
+{% extends "auth_base.html" %} {% block title %} Study Plan {% endblock %} 
+{% block content%}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+<style>
+
+    .form-group.floating>label {
+    bottom: 34px;
+    left: 8px;
+    position: relative;
+    background-color: white;
+    padding: 0px 5px 0px 5px;
+    font-size: 1.1em;
+    transition: 0.1s;
+    pointer-events: none;
+    font-weight: 500 !important;
+    transform-origin: bottom left;
+}
+
+.form-control.floating:focus~label{
+    transform: translate(1px,-85%) scale(0.80);
+    opacity: .8;
+    color: #005ebf;
+}
+
+.form-control.floating:valid~label{
+    transform-origin: bottom left;
+    transform: translate(1px,-85%) scale(0.80);
+    opacity: .8;
+}
+.form-floating{
+
+  padding-top: 100px;
+}
+</style>
+
+<div class="form-floating">
+    <select class="form-select floating" id="floatingSelect" aria-label="Floating label select example">
+      <option selected>Select</option>
+      <option value="1">DIS</option>
+      <option value="2">PPE</option>
+      
+    </select>
+    <label for="floatingSelect">Major </label>
+  </div>
+
+
+
+
+
+<div class="form-group floating">
+<input type="text" class="form-control floating" id="usr" required value="">
+<label for="usr">Username</label>
+</div>
+
+
+{% endblock %}
