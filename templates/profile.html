@@ -3,14 +3,21 @@
 <style> 
 
 .Name{
-    padding-top: 50px;
+    /* margin-top: 100px; */
+    color: #ffffff;
+}
+.container{
+        width: auto;
+        height: 700px;
+        background-color: #FFD13F;
+        box-shadow:0px 2px 5px #000;
 }
 
-
 </style>
-<div class="'Name">
-    <h1 align="center"> {{session['name']}} </h1>
-</div>
+
+    <div class="Name">
+        <h1 align="center"> {{session['name'] | title }} </h1>
+    </div>
    
 
 

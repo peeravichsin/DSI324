@@ -2,9 +2,9 @@
 import os
 import pathlib
 from flask_login import current_user
-
+from flask_sqlalchemy import SQLAlchemy
 import requests
-from flask import Flask, session, abort, redirect, request,render_template
+from flask import Flask, session, abort, redirect, request,render_template,flash
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
@@ -29,15 +29,15 @@ flow = Flow.from_client_secrets_file(
 
 ##################################################################### Setup mySQL ################################################################
 
-
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost/dsi324'
 
 
 ##################################################################### Setup mySQL ################################################################                                                         
 
 
 
+##################################################################### Login ######################################################################
 
-                                                                ### Login ###
 
 def login_is_required(function):
     def wrapper(*args, **kwargs):
@@ -73,22 +73,27 @@ def callback():
         request=token_request,
         audience=GOOGLE_CLIENT_ID
     )
-
+    
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
-    return redirect("/auth_home",session['name'])
+    flash(f'Welcome { session["name"] }', category='success')
+    return redirect("/auth_home")
 
 
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
-                                                                ### Login ###
+
+##################################################################### Login ######################################################################
 
 
 
 
-                                                                ### RenderTemplate ###
+
+
+##################################################################### RenderTemplate #############################################################
+
 
 
 @app.route("/")
@@ -113,13 +118,17 @@ def auth_home():
     return render_template('auth_home.html')
 
 
-                                                                ### RenderTemplate ###
+##################################################################### RenderTemplate #############################################################
 
 
 
-                                                                ### RunApp ###
+
+
+
+
+##################################################################### RunApp #####################################################################
 
 if __name__ == "__main__":
     app.run(debug=True)
 
-                                                                ### RunApp ###    
+##################################################################### RunApp #####################################################################   

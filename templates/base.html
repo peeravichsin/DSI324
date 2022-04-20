@@ -19,7 +19,9 @@
     <title>{% block title %}Home{% endblock %}</title>
     <style>
       /* Modify the background color */
-       
+      body{
+        background-color: #c7d0d8;
+      }
       .navbar-custom {
           background-color: #9B191D;
           box-shadow:0px 2px 5px rgb(32, 32, 32);
@@ -43,6 +45,14 @@
         align-content: center;
       }
 
+      .container{
+        width: auto;
+        height: 700px;
+        background-color: #ffff;
+        box-shadow:0px 2px 5px #000;
+      }
+     
+
 
 
   </style>
@@ -50,6 +60,7 @@
 
 
   </head>
+ 
   <body>
     <nav class="navbar navbar-expand-lg navbar-custom">
       <button
@@ -70,7 +81,7 @@
         </div>
       </div>
     </nav>
-
+   
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, message in messages %} {% if category ==
     'error' %}
@@ -89,7 +100,12 @@
     </div>
     {% endif %} {% endfor %} {% endif %} {% endwith %}
 
-    <div class="container">{% block content %} {% endblock %}</div>
+    <div class="container">
+      <div class="Logo">
+        <img src="..\static\ci-logo.svg" alt="ci-logo" width="200px" height="100px">
+      </div>
+      {% block content %} {% endblock %}
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
