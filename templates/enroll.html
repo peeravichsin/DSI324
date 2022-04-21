@@ -1,6 +1,17 @@
-{% extends "auth_base.html" %} {% block title %} Enroll {% endblock %} 
+{% extends "auth_base.html" %} 
+{% block title %} Enroll {% endblock %} 
 {% block content%}
 
-
-
+{% if exam %}
+    <h1>Hello {{ exam }}</h1>
+{% else %}
+    <h1>Please type something</h1>
+    <br/>
+    <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.exam.label(class="form-label") }}
+            {{ form.exam(class="form-control") }}
+            <br/>
+            {{ form.submit (class="btn btn-primary")}}
+{% endif %}
 {% endblock %}

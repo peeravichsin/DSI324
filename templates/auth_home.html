@@ -1,17 +1,11 @@
-{% extends "auth_base.html" %} {% block title %}Home{% endblock %} 
+{% extends "auth_base.html" %} 
+{% block title %}Home{% endblock %} 
 {% block content %}
-
-
-    <style>
-    
-    img{
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-       
-      }
-    </style>
-
+    <!-- Our style-->
+    <link
+    href="{{ url_for('static', filename='css/style.css')}}"
+    rel="stylesheet"
+    />
   
 
     {% endblock %}

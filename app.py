@@ -1,17 +1,42 @@
 ##################################################################### SetupApp ###################################################################
+
 import os
 import pathlib
+from datetime import datetime
 from flask_login import current_user
-from flask_sqlalchemy import SQLAlchemy
+from flask_mysqldb import MySQL
 import requests
 from flask import Flask, session, abort, redirect, request,render_template,flash
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
 
-app = Flask("Google Login App")
-app.secret_key = "CodeSpecialist.com"
+app = Flask("EnrollCheck")
+app.secret_key = "ifyouknowyouknowandifyoudontknowyoudontknow"
+
+
+##################################################################### SetupApp ###################################################################
+
+
+##################################################################### Setup mySQL ################################################################
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:soccer481200@localhost/dsi324'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'soccer481200'
+app.config['MYSQL_DB'] = 'dsi324'
+mysql = MySQL(app)
+
+##################################################################### Setup mySQL ################################################################                                                         
+
+
+
+##################################################################### Login ######################################################################
+
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
@@ -24,19 +49,9 @@ flow = Flow.from_client_secrets_file(
     redirect_uri="http://127.0.0.1:5000/callback"
 )
 
-##################################################################### SetupApp ###################################################################
-
-
-##################################################################### Setup mySQL ################################################################
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost/dsi324'
-
-
-##################################################################### Setup mySQL ################################################################                                                         
 
 
 
-##################################################################### Login ######################################################################
 
 
 def login_is_required(function):
@@ -92,17 +107,55 @@ def logout():
 
 
 
+
+
+##################################################################### FormFormat #################################################################
+
+
+# Create Form
+class TestFrom (FlaskForm):
+    exam = StringField("Type something", validators=[DataRequired()])
+    submit = SubmitField('Enter') 
+
+
+
+
+##################################################################### FormFormat #################################################################
+
+
+
+
+
+
+
+
+
+
 ##################################################################### RenderTemplate #############################################################
 
 
-
+# Default home
 @app.route("/")
 def home():
     return render_template('home.html')
 
-@app.route("/enroll")
+
+
+
+
+# Enroll
+@app.route("/enroll", methods =['GET','POST'])
 def enroll():
-    return render_template('enroll.html')
+    exam = None
+    form = TestFrom()
+    if form.validate_on_submit():
+        exam = form.exam.data
+        form.exam.data = ''
+        flash("Submit Successfully!")
+    return render_template('enroll.html',exam = exam, form = form)
+
+
+
 
 @app.route("/profile")
 def profile():
