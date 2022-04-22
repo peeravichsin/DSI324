@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  web:
+    build: ./website/.
+    ports:
+      - "8000:5000"
+    volumes:
+      - ./website/.:/code
+    environment:
+      FLASK_ENV: development
+  redis:
+    image: "redis:alpine"

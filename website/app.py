@@ -3,10 +3,11 @@
 import os
 import pathlib
 from datetime import datetime
-from flask_login import current_user
+from re import S
+from unicodedata import name
 from flask_mysqldb import MySQL
 import requests
-from flask import Flask, session, abort, redirect, request,render_template,flash
+from flask import Flask, session, abort, redirect, request,render_template,flash,url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
@@ -24,10 +25,9 @@ app.secret_key = "ifyouknowyouknowandifyoudontknowyoudontknow"
 
 ##################################################################### Setup mySQL ################################################################
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:soccer481200@localhost/dsi324'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'soccer481200'
+app.config['MYSQL_PASSWORD'] = 'your password'
 app.config['MYSQL_DB'] = 'dsi324'
 mysql = MySQL(app)
 
@@ -91,11 +91,42 @@ def callback():
     
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
-    flash(f'Welcome { session["name"] }', category='success')
-    return redirect("/auth_home")
-
+    session["email"] = id_info.get("email")
+    cur = mysql.connection.cursor()
+    user = cur.execute(f'SELECT * from Login WHERE user_id = {session["google_id"]}')
+    if user:
+        flash(f'Welcome { session["name"] }', category='success')
+        return redirect("/auth_home")
+    else:
+        return redirect("/sign_up")
+    
+@app.route("/sign_up",methods =['GET','POST'])
+def signup():
+    if request.method == 'POST':
+       user_id = session["google_id"]
+       user_email = session["email"]
+       student_email = session["email"]
+       name = session["name"].split(' ')
+       student_fname_en = name[0]
+       student_lname_en = name[1]
+       student_fname_th = request.form.get('student_fname_th')
+       student_lname_th = request.form.get('student_lname_th')
+       student_id = int(request.form.get('student_id'))
+       faculty_id = 24
+       major_name = request.form.get('major_name')
+       cur = mysql.connection.cursor()
+       cur.execute("INSERT INTO login (user_id, user_email) VALUES (%s, %s)", (user_id, user_email))
+       mysql.connection.commit()
+       cur.execute("INSERT INTO student (student_id, user_id, faculty_id, major_name, student_fname_en, student_lname_en, student_fname_th, student_lname_th, student_email) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                                           (student_id, user_id, faculty_id, major_name, student_fname_en, student_lname_en, student_fname_th, student_lname_th, student_email))
+       mysql.connection.commit()
+       cur.close()
+       flash('Profile created!', category='success')
+       return redirect(url_for('auth_home'))
+    return render_template('sign_up.html')
 
 @app.route("/logout")
+@login_is_required
 def logout():
     session.clear()
     return redirect("/")
@@ -144,7 +175,9 @@ def home():
 
 
 # Enroll
+@login_is_required
 @app.route("/enroll", methods =['GET','POST'])
+
 def enroll():
     exam = None
     form = TestFrom()
@@ -156,8 +189,9 @@ def enroll():
 
 
 
-
+@login_is_required
 @app.route("/profile")
+
 def profile():
     return render_template('profile.html')
 
@@ -165,8 +199,9 @@ def profile():
 def login():
     return render_template('login.html')
 
-@app.route("/auth_home")
 @login_is_required
+@app.route("/auth_home")
+
 def auth_home():
     return render_template('auth_home.html')
 
