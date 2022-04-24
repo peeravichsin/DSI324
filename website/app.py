@@ -4,6 +4,7 @@ import os
 import pathlib
 from datetime import datetime
 from re import S
+from select import select
 from unicodedata import name
 from flask_mysqldb import MySQL
 import requests
@@ -27,7 +28,7 @@ app.secret_key = "ifyouknowyouknowandifyoudontknowyoudontknow"
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'your password'
+app.config['MYSQL_PASSWORD'] = 'soccer481200'
 app.config['MYSQL_DB'] = 'dsi324'
 mysql = MySQL(app)
 
@@ -92,6 +93,7 @@ def callback():
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
+    session["picture"] = id_info.get("picture")
     cur = mysql.connection.cursor()
     user = cur.execute(f'SELECT * from Login WHERE user_id = {session["google_id"]}')
     if user:
@@ -111,7 +113,7 @@ def signup():
        student_lname_en = name[1]
        student_fname_th = request.form.get('student_fname_th')
        student_lname_th = request.form.get('student_lname_th')
-       student_id = int(request.form.get('student_id'))
+       student_id = request.form.get('student_id')
        faculty_id = 24
        major_name = request.form.get('major_name')
        cur = mysql.connection.cursor()
@@ -124,6 +126,8 @@ def signup():
        flash('Profile created!', category='success')
        return redirect(url_for('auth_home'))
     return render_template('sign_up.html')
+   
+
 
 @app.route("/logout")
 @login_is_required
@@ -191,9 +195,14 @@ def enroll():
 
 @login_is_required
 @app.route("/profile")
-
 def profile():
-    return render_template('profile.html')
+    id = session['google_id']
+    table =' student_id, major_name, student_fname_th, student_lname_th, faculty_name '
+    query = 'SELECT'+ table +'FROM student inner join faculty on student.faculty_id = faculty.faculty_id WHERE user_id ='+ id
+    cur = mysql.connection.cursor()
+    cur.execute(query)
+    profile_data = cur.fetchone()
+    return render_template('profile.html', profile_data=profile_data)
 
 @app.route("/login")
 def login():
@@ -201,9 +210,13 @@ def login():
 
 @login_is_required
 @app.route("/auth_home")
-
 def auth_home():
     return render_template('auth_home.html')
+
+@login_is_required
+@app.route("/studyplan")
+def studyplan():
+    return render_template('studyplan.html')
 
 
 ##################################################################### RenderTemplate #############################################################
