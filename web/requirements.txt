@@ -1,0 +1,4 @@
+flask
+flask_mysqldb
+requests
+google_auth_oauthlib

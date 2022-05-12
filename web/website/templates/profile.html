@@ -46,11 +46,12 @@
                         
                         <div class="col-sm-6">
                             <div class="font-weight-bold" style="font-size: 15px;">
-                                <label for="">รหัส&emsp;&emsp;&emsp;&ensp;&nbsp;{{ profile_data[0] }}</label><br>
-                                <label for="">ชื่อ&emsp;&emsp;&emsp;&emsp;&ensp;{{ profile_data[2] +' '+profile_data[3] }}</label><br>
-                                <label for="">ชั้นปี&emsp;&emsp;&emsp;&ensp;&nbsp;3</label><br>
-                                <label for="">หลักสูตร&emsp;&ensp;&nbsp;{{ profile_data[1] }}</label><br>
-                                <label for="">คณะ&emsp;&emsp;&emsp;&nbsp;&nbsp;{{ profile_data[4] }}</label><br>
+                                <label for="">รหัส&emsp;&emsp;&emsp;&ensp;&nbsp;{{ profile_data["student_id"] }}</label><br>
+                                <label for="">Name&emsp;&emsp;&emsp;{{ profile_data["student_fname_en"] | title +' '+profile_data["student_lname_en"] | title }}</label><br>
+                                <label for="">ชื่อ&emsp;&emsp;&emsp;&emsp;&ensp;{{ profile_data["student_fname_th"] +' '+profile_data["student_lname_th"] }}</label><br>
+                                <label for="">ชั้นปี&emsp;&emsp;&emsp;&ensp;&nbsp;{{ profile_data["study_year"] }}</label><br>
+                                <label for="">หลักสูตร&emsp;&ensp;&nbsp;{{ major_data["major_name"] }}</label><br>
+                                <label for="">คณะ&emsp;&emsp;&emsp;&nbsp;&nbsp;{{ faculty_data["faculty_name"] }}</label><br>
 
                                 <!-- <label for="">เพศ&emsp;&emsp;&emsp;&nbsp;&nbsp;</label>
                                 <input type="radio" id="contactChoice1"
