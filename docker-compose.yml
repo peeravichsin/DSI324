@@ -16,7 +16,7 @@ services:
   ### MySQL Container
   mysql:
       build:
-          context: ./mysqldb/.
+          context: ./mysql
           args:
               - MYSQL_DATABASE=${MYSQL_DATABASE}
               - MYSQL_USER=${MYSQL_USER}
