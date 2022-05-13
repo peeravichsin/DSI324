@@ -10,7 +10,7 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = "ifyouknowyouknowandifyoudontknowyoudontknow"
     app.config['MYSQL_HOST'] = "localhost"
-    app.config['MYSQL_USER'] = "root"
+    app.config['MYSQL_USER'] = "socps"
     app.config['MYSQL_PASSWORD'] = "soccer481200"
     app.config['MYSQL_DB'] = "dsi324"
     mysql = MySQL(app)
