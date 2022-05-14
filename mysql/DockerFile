@@ -18,7 +18,6 @@
 # EXPOSE 3306
 
 FROM mysql/mysql-server:5.5.62
-FROM mysql/mysql-server
 ARG MYSQL_ROOT_PASSWORD
 ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 COPY ./data.sql /home/data.sql
